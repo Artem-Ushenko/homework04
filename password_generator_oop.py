@@ -41,26 +41,35 @@ class PasswordGenerator:
 
     def generator(self):
         """
-        The different character sets from which to generate the password
         Generate and return a random password based on the initialized attributes.
 
         The generated password can include a mix of uppercase and lowercase letters,
         digits, and special characters, based on the user's preferences set during initialization.
 
         Returns:
-        The randomly generated password in type str.
+        The randomly generated password as a string.
         """
+        character_sets = []
 
-        uppercase_letters = string.ascii_uppercase if self.include_uppercase else ''
-        lowercase_letters = string.ascii_lowercase if self.include_lowercase else ''
-        digits = string.digits if self.include_digits else ''
-        special_chars = string.punctuation if self.include_special_chars else ''
+        if self.include_uppercase:
+            character_sets.append(string.ascii_uppercase)
 
-        # The combined character set
-        all_chars = uppercase_letters + lowercase_letters + digits + special_chars
+        if self.include_lowercase:
+            character_sets.append(string.ascii_lowercase)
 
-        # Generate a random password of the specified length
-        password = ''.join(random.choice(all_chars) for _ in range(self.length))
+        if self.include_digits:
+            character_sets.append(string.digits)
+
+        if self.include_special_chars:
+            character_sets.append(string.punctuation)
+
+        if not character_sets:
+            raise ValueError("At least one character set must be included.")
+
+        password = ''
+        for _ in range(self.length):
+            character_set = random.choice(character_sets)
+            password += random.choice(character_set)
 
         return password
 
